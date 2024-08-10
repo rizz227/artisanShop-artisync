@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container my-4">
+    <!-- Dashboard Title -->
+    <h3 class="my-4 border-bottom pb-1">My Dashboard</h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            {% include 'user/user-sidebar.html' %}
+        </div>
+        <div class="col-md-9">
+            <div>
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const labels = {{ monthNumber|safe }};
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Orders by Month',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+                data: {{ totalOrders|safe }},
+            }]
+        };
+
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        var myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container my-4">
+    <!-- Page Title -->
+    <h3 class="my-4 border-bottom pb-1">Service Details</h3>
+
+    <div class="row">
+        <!-- Column for Image -->
+        <div class="col-md-3">
+            {% with product.productattribute_set.first as attribute %}
+                {% if attribute and attribute.image %}
+                    <img src="{{ attribute.image.url }}" alt="{{ product.title }}" class="img-fluid">
+                {% else %}
+                    <img src="{% static 'media/default-image.png' %}" alt="Default Image" class="img-fluid">
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Service Details -->
+        <div class="col-md-9">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title">{{ product.title }}</h4>
+                    <p><strong>Slug:</strong> {{ product.slug }}</p>
+                    <p><strong>Details:</strong> {{ product.detail }}</p>
+                    <p><strong>Specifications:</strong> {{ product.specs }}</p>
+                    <p><strong>Category:</strong> {{ product.category.title }}</p>
+                    <p><strong>Status:</strong> {{ product.status }}</p>
+                    <p><strong>Featured:</strong> {% if product.is_featured %} Yes {% else %} No {% endif %}</p>
+
+                    <!-- Price Info -->
+                    {% with product.productattribute_set.first as attribute %}
+                        {% if attribute and attribute.price %}
+                            <p><strong>Price:</strong> ${{ attribute.price }}</p>
+                        {% else %}
+                            <p><strong>Price:</strong> Not Available</p>
+                        {% endif %}
+                    {% endwith %}
+
+                    <!-- Additional Info -->
+                    {% with product.productattribute_set.first as attribute %}
+                        <p><strong>Color:</strong> {% if attribute and attribute.color %}{{ attribute.color }}{% else %}No color specified{% endif %}</p>
+                        <p><strong>Size:</strong> {% if attribute and attribute.size %}{{ attribute.size }}{% else %}No size specified{% endif %}</p>
+                    {% endwith %}
+
+                    <!-- Buttons -->
+                    <a href="{% url 'update_product' product.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger">Delete</a>
+                    <a href="{% url 'my_services' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

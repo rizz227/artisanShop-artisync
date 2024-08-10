@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container my-4">
+    <!-- Page Title -->
+    <h3 class="my-4 border-bottom pb-1">Create Product</h3>
+
+    <div class="row">
+        <!-- Sidebar -->
+        <!-- You can add sidebar content here if needed -->
+
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Form for Creating a New Product -->
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Product Form -->
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    {{ form.title }}
+                </div>
+
+                <div class="form-group">
+                    <label for="slug">Slug</label>
+                    {{ form.slug }}
+                </div>
+
+                <div class="form-group">
+                    <label for="detail">Detail</label>
+                    {{ form.detail }}
+                </div>
+
+                <div class="form-group">
+                    <label for="specs">Specs</label>
+                    {{ form.specs }}
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    {{ form.category }}
+                    <div id="other_category_container" style="display: {% if form.category.value == form.OTHER_OPTION %} block {% else %} none {% endif %};">
+                        {{ form.other_category }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    {{ form.status }}
+                </div>
+
+                <div class="form-group">
+                    <label for="is_featured">Featured</label>
+                    {{ form.is_featured }}
+                </div>
+
+                <!-- Product Attributes -->
+                <h4>Product Attributes</h4>
+                <div id="product-attributes">
+                    <div class="attribute-row">
+                        <div class="form-group">
+                            <label for="color_0">Color</label>
+                            <input type="text" name="color_0" id="color_0" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="size_0">Size</label>
+                            <input type="text" name="size_0" id="size_0" class="form-control" >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price_0">Price</label>
+                            <input type="number" name="price_0" id="price_0" class="form-control" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image_0">Image</label>
+                            <input type="file" name="image_0" id="image_0" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="attribute_count" id="attribute_count" value="1">
+
+                <button type="submit" class="btn btn-success">Save</button>
+                <a href="{% url 'product-list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+    document.getElementById('id_category').addEventListener('change', function() {
+        var otherCategoryContainer = document.getElementById('other_category_container');
+        if (this.value === '{{ form.OTHER_OPTION }}') {
+            otherCategoryContainer.style.display = 'block';
+        } else {
+            otherCategoryContainer.style.display = 'none';
+        }
+    });
+
+    // Add more attributes dynamically if needed
+</script>
+{% endblock %}

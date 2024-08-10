@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="container my-4 " >
+    <div class="row align-items-center" style="margin-top:80px;" >
+        <!-- Image Section -->
+        <div class="col-md-6 d-flex justify-content-center" >
+            <img src="{% static 'media/login.png' %}" alt="Login Image" class="img-fluid" style="max-height:500px">
+        </div>
+        <!-- Login Form Section -->
+        <div class="col-md-6 d-flex justify-content-center">
+            <div class="w-100 p-4 ">
+                <h3 class="mb-4 mr-5 border-bottom pb-5 text-center">Login</h3>
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.username.label_tag }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.username }}
+                            {{ form.username.errors }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            {{ form.password.label_tag }}
+                        </div>
+                        <div class="form-group col-md-4">
+                            {{ form.password }}
+                            {{ form.password.errors }}
+                        </div>
+                    </div>
+                    <div class="form-group my-3 text-center">
+                        <input type="submit" value="Login" class="btn btn-primary" />
+                    </div>
+                </form>
+                <p class="text-center mt-3">
+                    <a href="{% url 'password_reset' %}" class="text-danger">Reset Password?</a>
+                </p>
+                <p class="text-center">
+                    If you are not registered, please <a href="{% url 'signup' %}">Sign up here</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

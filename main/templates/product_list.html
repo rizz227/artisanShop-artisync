@@ -1,0 +1,56 @@
+{% load static %}
+<!-- product_list.html -->
+
+<div class="row">
+    {% for product in data %}
+    <div class="col-md-3 mb-4">
+        <div class="card shadow">
+            <div class="card-header">
+                {% with product.productattribute_set.first as attr %}
+                    {% if attr and attr.image %}
+                        <img src="/media/{{ attr.image }}" alt="{{ product.title }}" class="card-img-top">
+                    {% else %}
+                        <img src="{% static 'media/default-image.png' %}" alt="Default Image" class="card-img-top">
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="card-body">
+                <h5 class="card-text">
+                    <a href="/product/{{ product.slug }}/{{ product.id }}">{{ product.title }}</a>
+                </h5>
+                {% with product.productattribute_set.first as attr %}
+                    {% if attr and attr.price %}
+                        <h6>$ <span class="product-price-{{ product.id }}">{{ attr.price }}</span></h6>
+                    {% else %}
+                        <h6>Price not available</h6>
+                    {% endif %}
+                {% endwith %}
+            </div>
+            <div class="card-footer">
+                
+                <input type="hidden" class="product-title-{{ product.id }}" value="{{ product.title }}">
+                <input type="hidden" class="product-id-{{ product.id }}" value="{{ product.id }}">
+                <button type="button" class="btn btn-primary btn-block add-to-cart" data-product-id="{{ product.id }}">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-md-12">
+        <p>No products available.</p>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Add this CSS to style the images -->
+<style>
+    .card-header {
+        padding: 0;
+    }
+
+    .card-img-top {
+        width: 100%;
+        height: 150px; /* Adjust height as needed */
+        object-fit: cover; /* Ensures image fits within the bounds */
+        border-bottom: 1px solid #ddd; /* Optional: Adds a border below the image */
+    }
+</style>

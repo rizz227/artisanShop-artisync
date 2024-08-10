@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artisync</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'media/logo.png' %}">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Bootstrap 4 CSS -->
+    <link rel="stylesheet" href="{% static 'bs4/bootstrap.min.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'custom.css' %}">
+    <style>
+        .navbar {
+            background-color: white;
+            color: black;
+        }
+
+        .navbar .navbar-brand,
+        .navbar .nav-link {
+            color: black;
+        }
+
+        .navbar .navbar-toggler-icon {
+            background-image: url("{% static 'icons/toggler-icon-black.png' %}");
+            background-color: transparent; /* Fallback if the custom icon is not available */
+        }
+    </style>
+</head>
+<body>
+{% block navbar %}
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="/">Artisync</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="d-flex flex-grow-1">
+                    {% block search %}
+                    <form class="form-inline my-2 my-lg-0 ml-auto" action="/search">
+                        <div class="input-group">
+                            <input name="q" type="text" class="form-control" placeholder="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% endblock %}
+                </div>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'category-list' %}">Categories</a>
+                        </li>
+    
+                        {% if user.role == 'CLIENT' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cart' %}">
+                                    <i class="fa fa-shopping-cart"></i> Cart (<span class="cart-list">{{ request.session.cartdata|length }}</span>)
+                                </a>
+                            </li>
+                        {% endif %}
+    
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user"></i> My Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'my_dashboard' %}">Dashboard</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-user"></i> My Account
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                                <a class="dropdown-item" href="{% url 'signup' %}">Signup</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+{% endblock navbar %}
+    
+    
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="pt-4 my-md-5 pt-md-5 border-top container">
+        <div class="row">
+            <div class="col-12 col-md">
+                <a href="#">Artisync</a>
+                <small class="d-block mb-3 text-muted">&copy; 2024</small>
+            </div>
+            <div class="col-6 col-md">
+                <h5>Features</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Cool stuff</a></li>
+                    <li><a class="text-muted" href="#">Random feature</a></li>
+                    <li><a class="text-muted" href="#">Team feature</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md">
+                <h5>About</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">Team</a></li>
+                    <li><a class="text-muted" href="#">Privacy</a></li>
+                    <li><a class="text-muted" href="#">Terms</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-md mb-5">
+                <h5>Contact</h5>
+                <ul class="list-unstyled text-small">
+                    <li><a class="text-muted" href="#">+1 234 567 890</a></li>
+                    <li><a class="text-muted" href="#">info@artisync.com</a></li>
+                    <li><a class="text-muted" href="#">123 Artisync St, City, Country</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main jQuery -->
+    <script src="{% static 'jquery.min.js' %}"></script>
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <!-- Bootstrap 4 JS -->
+    <script src="{% static 'bs4/bootstrap.min.js' %}"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'custom.js' %}"></script>
+</body>
+</html>

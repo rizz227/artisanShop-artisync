@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="container my-4">
+    <!-- Page Title -->
+    <h3 class="my-4 border-bottom pb-1">My Services</h3>
+    
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3">
+            {% include 'user/user-sidebar.html' %}
+        </div>
+        
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <!-- Add Service Button -->
+            <a href="{% url 'create_product' %}" class="btn btn-primary mb-3">Add Service</a>
+            
+            <!-- Services List -->
+            <ul class="list-group">
+                {% for product in products %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{% url 'service_detail' product.pk %}">{{ product.title }}</a>
+                        <div>
+                            <a href="{% url 'update_product' product.pk %}" class="btn btn-warning btn-sm ml-2">Edit</a>
+                            <a href="{% url 'delete_product' product.pk %}" class="btn btn-danger btn-sm ml-2">Delete</a>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No services found.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</main>
+{% endblock %}

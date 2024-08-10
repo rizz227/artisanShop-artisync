@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main class="container my-4">
+    <h3 class="my-4 border-bottom pb-1">Review for {{ review.product.title }}</h3>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text"><strong>Rating:</strong> {{ review.review_rating }} stars</p>
+                    <p class="card-text"><strong>Comment:</strong> {{ review.review_text }}</p>
+                    <p class="card-text"><strong>Reviewed by:</strong> {{ review.user }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

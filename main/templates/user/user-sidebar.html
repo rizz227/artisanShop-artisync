@@ -1,0 +1,35 @@
+<div class="list-group shadow-sm rounded">
+    
+
+    <a href="{% url 'edit-profile' %}" class="list-group-item list-group-item-action {% if request.path == '/edit-profile' %}active{% endif %}">
+        <i class="fas fa-user-edit me-2"></i> Profile
+    </a>
+
+    {% if user.role == 'ARTISAN' %}
+        <a href="{% url 'my_dashboard' %}" class="list-group-item list-group-item-action {% if request.path == '/my-dashboard' %}active{% endif %}">
+            <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+        </a>
+        <a href="{% url 'my_services' %}" class="list-group-item list-group-item-action {% if request.path == '/my-services' %}active{% endif %}">
+            <i class="fas fa-briefcase me-2"></i> My Services
+        </a>
+        <a href="{% url 'my_reviews' %}" class="list-group-item list-group-item-action {% if request.path == '/my-reviews' %}active{% endif %}">
+            <i class="fas fa-star me-2"></i> My Reviews
+        </a>
+
+    {% elif user.role == 'CLIENT' %}
+        <a href="{% url 'my_orders' %}" class="list-group-item list-group-item-action {% if request.path == '/my-orders' %}active{% endif %}">
+            <i class="fas fa-shopping-cart me-2"></i> Orders
+        </a>
+        <a href="{% url 'my_wishlist' %}" class="list-group-item list-group-item-action {% if request.path == '/my-wishlist' %}active{% endif %}">
+            <i class="fas fa-heart me-2"></i> Wishlist
+        </a>
+    {% endif %}
+    
+    <a href="{% url 'password_change' %}" class="list-group-item list-group-item-action {% if request.path == '/accounts/password_change/' %}active{% endif %}">
+        <i class="fas fa-lock me-2"></i> Password Change
+    </a>
+    
+    <a href="{% url 'logout' %}" class="list-group-item list-group-item-action text-danger">
+        <i class="fas fa-sign-out-alt me-2"></i> Logout
+    </a>
+</div>

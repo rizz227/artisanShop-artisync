@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+    }
+  
+    .bg-image {
+        background-image: url("{% static 'media/backgroundImage.jpg' %}");
+        height: 100vh;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+    }
+    .content {
+        position: relative;
+        z-index: 1;
+    }
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 0;
+    }
+    .navbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0) !important; /* Fully transparent */
+        color: white;
+        z-index: 1;
+    }
+    .navbar .navbar-brand, .navbar .nav-link {
+        color: white !important;
+    }
+    .navbar .navbar-toggler-icon {
+        background-image: url("{% static 'icons/toggler-icon-white.png' %}"); /* Optional: Custom toggler icon */
+    }
+
+
+    .title h2 {
+        margin-bottom: 20px;
+    }
+    .title h4 {
+        margin-bottom: 40px;
+    }
+
+
+                /* Style for the Swiper container */
+        .swiper-container {
+            width: 100%; /* Adjust this percentage as needed */
+            max-width: 1200px; /* Optional: Set a maximum width for larger screens */
+            margin: 0 auto; /* Center the swiper container horizontally */
+            padding: 20px 0; /* Optional: Add padding for spacing */
+            overflow: hidden; /* Ensure no overflow beyond container */
+        }
+
+        /* Ensure swiper slides do not stretch */
+        .swiper-wrapper {
+            display: flex;
+            align-items: center; /* Center slides vertically */
+        }
+
+        .swiper-slide {
+            flex: 0 0 auto; /* Prevent the slides from stretching */
+            width: calc(33.33% - 20px); /* Show 3 slides at a time, minus margin */
+            height: 18rem; /* Adjust height as needed */
+            margin: 0 10px; /* Margin between slides */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
+        }
+
+        .swiper-slide img {
+            width: 100%; /* Fill the slide */
+            height: 100%;
+            object-fit: cover; /* Maintain aspect ratio and cover area */
+            border-radius: 0.25rem; /* Optional: Add border radius */
+        }
+
+
+</style>
+
+{% block navbar %}
+<nav class="navbar navbar-expand-lg navbar-transparent">
+    <div class="container">
+        <a class="navbar-brand" href="/">Artisync</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            {% block search %}
+            <form class="form-inline my-2 my-lg-0" action="/search">
+                <div class="input-group">
+                    <input name="q" type="text" class="form-control" placeholder="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-secondary" type="submit" id="button-addon2">Search</button>
+                    </div>
+                </div>
+            </form>
+            {% endblock %}
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'category-list' %}">Categories</a>
+                    </li>
+                    {% if user.role == 'CLIENT' %}
+                        <!-- Cart link can be shown conditionally if needed -->
+                       
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'cart' %}">
+                                <i class="fa fa-shopping-cart"></i> Cart (<span class="cart-list">{{ request.session.cartdata|length }}</span>)
+                            </a>
+                        </li>
+                       
+                    {% endif %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> My Account
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if user.is_authenticated %}
+                                <a class="dropdown-item" href="{% url 'my_dashboard' %}">Dashboard</a>
+                                <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            {% else %}
+                                <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                                <a class="dropdown-item" href="{% url 'signup' %}">Signup</a>
+                            {% endif %}
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user"></i> My Account
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                            <a class="dropdown-item" href="{% url 'signup' %}">Signup</a>
+                        </div>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+{% endblock navbar %}
+
+
+<div class="bg-image">
+    <div class="overlay"></div>
+    <div class="content">
+        <h1>We love to make things amazing and simple.</h1>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam inventore.</p>
+        <a class="btn btn-secondary btn-lg " href="{% url 'login' %}">Get started with us</a>
+    </div>
+</div>
+
+
+    <!-- learn more about us  -->
+
+<div class="container " style="margin-top:120px;margin-bottom:120px;">
+   
+    <div class="row d-flex align-items-center justify-content-start">
+        <div class="col-md-6 mb-4 ">
+            <h3 class="mb-5"> Learn more about us </h3>
+            <p>Tributes to individuals who served as Executive Secretary and Treasurer for the American Finance Association.</p>
+            <ul class="list-unstyled mt-5">
+                <li>Notable articles in economics journals</li>
+                <li>Involvements in departments of management in Ontario, Canada</li>
+            </ul>
+        </div>
+        <div class="col-md-6 mb-4 text-center">
+            <img src="{%static 'media/Carpenter-1.jpeg' %}" alt="Description of Image" class="img-fluid">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+    <!-- how it works -->
+
+    <div class="container my-5">
+        <div class="title text-center mb-5">
+            <hr>
+            <h2> How It Works</h2>
+            <h4>A Tribute To Those Who Served as Executive Secretary and<br> Treasurer for the American Finance Association.</h4>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-lg-4 mb-4 text-center">
+                
+                <i class="fa-solid fa-bell-concierge fa-5x"></i>
+           
+                       
+                        <h4 class="mt-3"> order a servcie</h4>
+           
+            
+            </div>
+            <div class="col-sm-4 col-lg-4 mb-4 text-center">
+              
+                    <i class="fa-solid fa-money-bill-wave fa-5x"></i>
+         
+           
+                        <h4 class="mt-3">pay for the service</h4>
+              
+          
+            </div>
+            <div class="col-sm-4 col-lg-4 mb-4 text-center">
+                <i class="fa-regular fa-face-smile fa-5x"></i>
+            
+                        <h4 class="mt-3">rate the service</h4>
+          
+          
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+        <!-- images swiper   -->
+
+        <div class="container my-5">
+            <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><img src="{%static 'media/artisan-5.png' %}" alt="Image 1"></div>
+                    <div class="swiper-slide"><img src="{%static 'media/carpenter-2.jpg' %}" alt="Image 2"></div>
+                    <div class="swiper-slide"><img src="{%static 'media/artisan-2.png' %}" alt="Image 3"></div>
+                    <div class="swiper-slide"><img src="{%static 'media/artisan-3.jpg' %}" alt="Image 4"></div>
+                    <div class="swiper-slide"><img src="{%static 'media/plombier-1.jpg' %}" alt="Image 5"></div>
+                    <div class="swiper-slide"><img src="{%static 'media/artisan-4.png' %}" alt="Image 6"></div>
+                </div>
+                <!-- Add Pagination -->
+                <div class="swiper-pagination"></div>
+                <!-- Add Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    
+
+
+
+    <!-- Get to know the best in the field   -->
+
+    <div class="container" style="margin-top:120px;margin-bottom:120px;">
+        <div class="row d-flex align-items-center justify-content-start">
+            <!-- Image on the left -->
+            <div class="col-md-6 mb-4 text-center">
+                <img src="{% static 'media/artisan-1.png' %}" alt="Description of Image" class="img-fluid">
+            </div>
+            <!-- Text on the right -->
+            <div class="col-md-6 mb-4">
+                <h3 class="mb-5"> Get to know the best in the field </h3>
+                <p>Tributes to individuals who served as Executive Secretary and Treasurer for the American Finance Association.</p>
+                <ul class="list-unstyled mt-5">
+                    <li>Notable articles in economics journals</li>
+                    <li>Involvements in departments of management in Ontario, Canada</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 3, // Show 3 images at a time
+            spaceBetween: 30, // Space between each image
+            loop: true, // Loop the images
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            autoplay: {
+                delay: 2500, // Auto-slide delay in milliseconds
+                disableOnInteraction: false,
+            },
+        });
+    </script>
+
+{% endblock %}
